@@ -19,7 +19,7 @@ export default function HomePage() {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/process-invoice", {
+      const response = await fetch("https://project-swipe.onrender.com/process-invoice", {
         method: "POST",
         body: formData,
       });
