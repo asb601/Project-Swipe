@@ -1,0 +1,5 @@
+openpyxl
+pandas
+google-generativeai
+flask-cors
+python-dotenv

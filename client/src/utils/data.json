@@ -1,0 +1,77 @@
+{
+    "Invoices": [
+      {
+        "serialNumber": "1",
+        "customerName": "Shounak",
+        "productName": "GEMS CHOCLATE POUCH",
+        "quantity": "1000.000",
+        "tax": "5%",
+        "totalAmount": "5000.00",
+        "date": "12 Nov 2024"
+      },
+      {
+        "serialNumber": "2", 
+        "customerName": "Shounak",
+        "productName": "TREAT BKS CASE 80PKT",
+        "quantity": "50.000",
+        "tax": "12%",
+        "totalAmount": "30000.00",
+        "date": "12 Nov 2024"
+      },
+      {
+        "serialNumber": "3",
+        "customerName": "Shounak", 
+        "productName": "NUTRI CHOICE BKS CASE",
+        "quantity": "25.000",
+        "tax": "5%",
+        "totalAmount": "17500.00",
+        "date": "12 Nov 2024"
+      },
+      {
+        "serialNumber": "4",
+        "customerName": "Shounak",
+        "productName": "MILK BIKIS CLASSIC CASE 120PK", 
+        "quantity": "20.000",
+        "tax": "5%",
+        "totalAmount": "17000.00",
+        "date": "12 Nov 2024"
+      }
+    ],
+    "Products": [
+      {
+        "productName": "GEMS CHOCLATE POUCH",
+        "quantity": "1000.000",
+        "unitPrice": "4.7619",
+        "tax": "5%",
+        "priceWithTax": "5.0000"
+      },
+      {
+        "productName": "TREAT BKS CASE 80PKT", 
+        "quantity": "50.000",
+        "unitPrice": "535.7143",
+        "tax": "12%",
+        "priceWithTax": "600.000"
+      },
+      {
+        "productName": "NUTRI CHOICE BKS CASE",
+        "quantity": "25.000", 
+        "unitPrice": "666.6667",
+        "tax": "5%",
+        "priceWithTax": "700.000"
+      },
+      {
+        "productName": "MILK BIKIS CLASSIC CASE 120PK",
+        "quantity": "20.000",
+        "unitPrice": "809.5238", 
+        "tax": "5%",
+        "priceWithTax": "850.000"
+      }
+    ],
+    "Customers": [
+      {
+        "customerName": "Shounak",
+        "phoneNumber": "9999999994",
+        "totalPurchaseAmount": "205481.00"
+      }
+    ]
+  }
