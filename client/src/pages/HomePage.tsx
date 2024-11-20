@@ -33,7 +33,7 @@ export default function HomePage() {
       dispatch(setData(result));
       console.log("Redux State After Update:", { invoices, products, customers });
 
-      console.log("Redux State After Update:", result) // Store data in Redux
+      console.log("Redux State After Update:", result) 
     } catch (error) {
       console.error("Error uploading file:", error);
     }

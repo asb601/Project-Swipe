@@ -19,18 +19,18 @@ export const InvoicesTable = () => {
     return <div className="text-center m-3">No Invoices Found</div>;
   }
 
-  // Group invoices by serialNumber
+  
   const groupedInvoices = invoices.reduce((acc: any, invoice: any) => {
     if (!acc[invoice.serialNumber]) {
       acc[invoice.serialNumber] = {
         serialNumber: invoice.serialNumber,
         customerName: invoice.customerName,
         date: invoice.date,
-        totalAmount: "0", // Initialize as a string
+        totalAmount: "0", 
         products: [],
       };
     }
-    // Add totalAmount as a string and ensure proper formatting
+
     const currentAmount = parseFloat(invoice.totalAmount || "0");
     const existingAmount = parseFloat(acc[invoice.serialNumber].totalAmount || "0");
     acc[invoice.serialNumber].totalAmount = (existingAmount + currentAmount).toFixed(2);
@@ -97,7 +97,7 @@ export const InvoicesTable = () => {
                 <button
                   className="text-blue-500 underline hover:text-blue-700 transition-colors"
                   onClick={() => {
-                    // Dispatch to switch to the Products tab
+                    
                     dispatch(setActiveTab("products"));
                   }}
                 >

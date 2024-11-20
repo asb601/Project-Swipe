@@ -14,7 +14,7 @@ api_key = os.getenv("API_KEY")
 if not api_key:
     raise ValueError("API_KEY not found in environment variables. Please check your .env file.")
 
-# Configure GenAI
+
 genai.configure(api_key=api_key)
 
 def extract_invoice_details_from_excel(file_path):
@@ -28,11 +28,11 @@ def extract_invoice_details_from_excel(file_path):
         dict: A dictionary containing the extracted invoice details and totals separately.
     """
     try:
-        # Read the Excel file
+        
         print("Reading Excel file...")
         df = pd.read_excel(file_path)
 
-        # Fill missing values with empty strings
+      
         df.fillna("", inplace=True)
 
         invoices = []
@@ -40,11 +40,11 @@ def extract_invoice_details_from_excel(file_path):
         customers = []
         totals = []
 
-        # Iterate over rows to extract and separate data
+        
         for _, row in df.iterrows():
-            # Skip rows where critical fields are empty
+           
             if not row.get("Serial Number") or not row.get("Product Name"):
-                # Check if it's a totals row
+            
                 if row.get("Serial Number") == "Totals":
                     totals.append({
                         "totalQuantity": row.get("Qty", ""),
@@ -57,7 +57,7 @@ def extract_invoice_details_from_excel(file_path):
                     })
                 continue
 
-            # Extract invoice data
+           
             invoices.append({
                 "serialNumber": row.get("Serial Number", ""),
                 "customerName": row.get("Party Name", ""),
@@ -68,31 +68,31 @@ def extract_invoice_details_from_excel(file_path):
                 "date": row.get("Invoice Date", "")
             })
 
-            # Extract product data
+           
             products.append({
                 "productName": row.get("Product Name", ""),
                 "quantity": row.get("Qty", ""),
-                "unitPrice": "",  # Unit Price column not found in the file
+                "unitPrice": "",  
                 "tax": row.get("Tax (%)", ""),
                 "priceWithTax": row.get("Price with Tax", "")
             })
 
-            # Extract customer data
+            
             customers.append({
                 "customerName": row.get("Party Name", ""),
                 "phoneNumber": row.get("Phone Number", ""),
                 "totalPurchaseAmount": row.get("Item Total Amount", "")
             })
 
-        # Consolidate extracted data
+     
         consolidated_data = {
             "Invoices": invoices,
             "Products": products,
             "Customers": customers,
-            "Totals": totals  # Add totals as a separate key
+            "Totals": totals  
         }
 
-        # Print the JSON-formatted data for debugging
+        
         print("Extracted Data in JSON Format:")
         print(json.dumps(consolidated_data, indent=4))
 
@@ -109,36 +109,36 @@ def clean_extracted_data(raw_data):
     Clean the raw extracted data by removing unwanted characters like Markdown formatting.
     """
     try:
-        # Remove backticks and "```json" markers
+      
         cleaned_data = raw_data.replace("```json", "").replace("```", "").strip()
         return cleaned_data
     except Exception as e:
         print(f"Error during cleaning extracted data: {e}")
-        return raw_data  # Return raw data if cleaning fails
+        return raw_data  
 
 def convert_to_dataframe_and_dump(data):
     """
     Convert structured JSON data to pandas DataFrame and dump as a JSON string.
     """
     try:
-        # Convert extracted data to DataFrames
+        
         invoices_df = pd.DataFrame(data.get("Invoices", []))
         products_df = pd.DataFrame(data.get("Products", []))
         customers_df = pd.DataFrame(data.get("Customers", []))
 
-        # Save DataFrames as JSON strings
+   
         invoices_json = invoices_df.to_json(orient="records", indent=4)
         products_json = products_df.to_json(orient="records", indent=4)
         customers_json = customers_df.to_json(orient="records", indent=4)
 
-        # Consolidate JSON output
+       
         final_json = {
             "Invoices": json.loads(invoices_json),
             "Products": json.loads(products_json),
             "Customers": json.loads(customers_json),
         }
 
-        # Dump final consolidated JSON for output
+   
         dumped_json = json.dumps(final_json, indent=4)
         print("Final JSON Data Dumped:")
         print(dumped_json)
@@ -157,7 +157,7 @@ def extract_invoice_details(file_path):
         uploaded_file = genai.upload_file(file_path)
         print(f"File uploaded successfully: {uploaded_file.name}")
 
-        # Prompt for generative AI
+ 
         prompt = """
         Extract all the structured information from this invoice in JSON format for the following fields:
         {
@@ -194,18 +194,17 @@ def extract_invoice_details(file_path):
         model = genai.GenerativeModel(model_name="gemini-1.5-pro")
         print("Generating content...")
 
-        # Generate content using uploaded file and prompt
+       
         response = model.generate_content([uploaded_file, "\n\n", prompt])
         raw_data = response.text
 
-        # Clean raw extracted data
         print("Raw Extracted Data:")
-        print(repr(raw_data))  # Print raw data to debug hidden characters
+        print(repr(raw_data))  
 
         cleaned_data = clean_extracted_data(raw_data)
-        extracted_json = json.loads(cleaned_data)  # Parse cleaned JSON string
+        extracted_json = json.loads(cleaned_data)  
 
-        # Consolidate and dump JSON
+       
         final_json = convert_to_dataframe_and_dump(extracted_json)
         return json.loads(final_json)
 
@@ -228,33 +227,33 @@ if __name__ == "__main__":
 @app.route('/process-invoice', methods=['POST'])
 def process_invoice():
     try:
-        # Check if a file is provided
+     
         if 'file' not in request.files:
             return jsonify({"error": "No file provided"}), 400
 
         file = request.files['file']
 
-        # Save the uploaded file temporarily
+      
         file_path = os.path.join("uploads", file.filename)
         os.makedirs("uploads", exist_ok=True)
         file.save(file_path)
 
-        # Determine the file type
+      
         _, file_extension = os.path.splitext(file.filename.lower())
 
         if file_extension in ['.xlsx', '.xls']:
-            # Process Excel file
+     
             data = extract_invoice_details_from_excel(file_path)
         elif file_extension in ['.pdf', '.png', '.jpg', '.jpeg']:
-            # Process PDF or image file
+    
             data = extract_invoice_details(file_path)
         else:
             return jsonify({"error": "Unsupported file type"}), 400
 
-        # Clean up temporary file after processing
+      
         os.remove(file_path)
 
-        # Convert the processed data into JSON and return
+     
         return jsonify(data)
 
     except Exception as e:

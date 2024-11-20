@@ -13,7 +13,7 @@ import { RootState } from "../redux/store";
 export const CustomersTable = ({ onTabChange }: { onTabChange: (tab: string) => void }) => {
   const customers = useSelector((state: RootState) => state.data.customers);
 
-  // Log customers data for debugging
+
   console.log("Customers Data in CustomersTable:", customers);
 
   if (!customers || customers.length === 0) {
