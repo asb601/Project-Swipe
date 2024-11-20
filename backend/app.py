@@ -222,10 +222,7 @@ def extract_invoice_details(file_path):
 
 
 if __name__ == "__main__":
-
-    file_path = "./test_case_1/simple_invoice_2.pdf"
-    invoice_details = extract_invoice_details(file_path)
-
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
  
     
 @app.route('/process-invoice', methods=['POST'])
